@@ -14,15 +14,11 @@ const allowedCors = [
   'localhost:3000',
   'http://localhost:3000/',
   'localhost:3000/',
-  'http://192.168.50.208:3000',
-  '192.168.50.208:3000',
-  'http://192.168.0.11:3000',
-  '192.168.0.11:3000',
-  'https://efes2002.students.nomoredomains.xyz',
-  'efes2002.students.nomoredomains.xyz',
-  'efes2002.students.nomoredomains.xyz:3000',
-  '51.250.31.22',
-  '51.250.31.22:3000',
+  'https://movieteka.ru',
+  'movieteka.ru',
+  'movieteka.ru:3000',
+  '51.250.98.124',
+  '51.250.98.124:3000',
 ];
 
 mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
@@ -73,5 +69,6 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
+  // eslint-disable-next-line no-console
   console.log(`App listening on port ${PORT}`);
 });
