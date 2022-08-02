@@ -5,7 +5,6 @@ const ForbiddenError = require('../errors/forbiddenError');
 
 module.exports.getMovies = (req, res, next) => {
   Movie.find({ owner: req.user._id })
-    .populate('owner')
     .then((movies) => res.send(movies))
     .catch(next);
 };
@@ -39,22 +38,17 @@ module.exports.createMovie = (req, res, next) => {
     nameRU,
     nameEN,
   })
-    .then((movie) => Movie.findById(movie._id)
-      .populate('owner')
-      .then((item) => {
-        if (!item) {
-          next(new NotFoundError('Карточка не найдена'));
-        } else {
-          res.status(201).send(item);
-        }
-      })
-      .catch((err) => {
-        if (err.name === 'CastError') {
-          return next(new BadRequestError('Переданы некорректные данные'));
-        }
-        return next(err);
-      }))
+    .then((item) => {
+      if (!item) {
+        next(new NotFoundError('Карточка не найдена'));
+      } else {
+        res.status(201).send(item);
+      }
+    })
     .catch((err) => {
+      if (err.name === 'CastError') {
+        return next(new BadRequestError('Переданы некорректные данные'));
+      }
       if (err.name === 'ValidationError') {
         return next(new BadRequestError(`Переданы некорректные данные - ${err.message}`));
       }
@@ -75,12 +69,7 @@ module.exports.deleteMovie = (req, res, next) => {
             res.send(item);
           }
         })
-        .catch((err) => {
-          if (err.name === 'CastError') {
-            return next(new BadRequestError('Переданы некорректные данные'));
-          }
-          return next(err);
-        });
+        .catch(next);
     } else {
       next(new ForbiddenError('Карточка не принадлежит этому id'));
     }
