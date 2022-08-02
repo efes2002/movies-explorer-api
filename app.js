@@ -7,7 +7,7 @@ const { errors } = require('celebrate');
 const routes = require('./routes/index');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-const { PORT = 4000 } = process.env;
+const { PORT = 4000, URL_MONGODB } = process.env;
 
 const allowedCors = [
   'http://localhost:3000',
@@ -21,7 +21,7 @@ const allowedCors = [
   '51.250.98.124:3000',
 ];
 
-mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
+mongoose.connect(URL_MONGODB, {
   useNewUrlParser: true,
 });
 

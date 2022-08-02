@@ -92,6 +92,11 @@ module.exports.updateProfile = (req, res, next) => {
       if (err.name === 'ValidationError') {
         return next(new BadRequestError('Переданы некорректные данные'));
       }
+      if (err.code === 11000) {
+        if (err.codeName === 'DuplicateKey') {
+          return next(new ConflictError('Переданы некорректные данные'));
+        }
+      }
       return next(err);
     });
 };
