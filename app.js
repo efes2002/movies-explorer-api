@@ -6,8 +6,10 @@ const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
 const routes = require('./routes/index');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const { URL_MONGODB_DEV } = require('./utils/devConfig');
 
-const { PORT = 4000, URL_MONGODB } = process.env;
+const { PORT = 4000, NODE_ENV } = process.env;
+const URL_MONGODB = NODE_ENV === 'production' ? process.env.URL_MONGODB : URL_MONGODB_DEV;
 
 const allowedCors = [
   'http://localhost:3000',

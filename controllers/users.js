@@ -5,6 +5,7 @@ const BadRequestError = require('../errors/badRequestError');
 const UnauthorizedError = require('../errors/unauthorizedError');
 const NotFoundError = require('../errors/notFoundError');
 const ConflictError = require('../errors/conflictError');
+const { JWT_SECRET_DEV } = require('../utils/devConfig');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -60,7 +61,7 @@ module.exports.login = (req, res, next) => {
           if (!matched) {
             next(new UnauthorizedError('Неправильные почта или пароль'));
           } else {
-            const secretKey = NODE_ENV === 'production' ? JWT_SECRET : 'some-secret-key';
+            const secretKey = NODE_ENV === 'production' ? JWT_SECRET : JWT_SECRET_DEV;
             const token = jwt.sign(
               { _id: user._id },
               secretKey,
@@ -87,10 +88,8 @@ module.exports.updateProfile = (req, res, next) => {
       if (err.name === 'ValidationError') {
         return next(new BadRequestError('Переданы некорректные данные'));
       }
-      if (err.code === 11000) {
-        if (err.codeName === 'DuplicateKey') {
-          return next(new ConflictError('Переданы некорректные данные'));
-        }
+      if (err.codeName === 'DuplicateKey') {
+        return next(new ConflictError('Почтовый ящик уже используется'));
       }
       return next(err);
     });
