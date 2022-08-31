@@ -17,8 +17,11 @@ const allowedCors = [
   'http://localhost:3000/',
   'localhost:3000/',
   'https://movieteka.ru',
+  'https://www.movieteka.ru',
+  'www.movieteka.ru',
   'movieteka.ru',
   'movieteka.ru:3000',
+  'www.movieteka.ru:3000',
   '51.250.98.124',
   '51.250.98.124:3000',
 ];
